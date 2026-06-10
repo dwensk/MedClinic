@@ -1,0 +1,19 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+sqlalchemy==2.0.36
+pydantic==2.10.4
+pydantic-settings==2.7.1
+email-validator==2.2.0
+psycopg2-binary==2.9.10
+python-dotenv==1.0.1
+faker==33.1.0
+# Для Недели 4+ (авторизация и хэширование паролей):
+bcrypt==5.0.0
+python-multipart==0.0.32
+python-jose[cryptography]==3.3.0
+
+aiofiles==24.1.0
+
+# Тесты
+pytest==9.0.3
+httpx==0.28.1

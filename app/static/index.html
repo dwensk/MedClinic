@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>МедКлиник</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ── Login ──────────────────────────────── -->
+<div id="login-screen">
+  <div class="login-card">
+    <h1>МедКлиник</h1>
+    <p class="subtitle">Система управления клиникой</p>
+    <form id="login-form" autocomplete="on">
+      <label>
+        Email
+        <input type="email" id="login-email" name="username" required autocomplete="username"
+               placeholder="admin@klinik.kz">
+      </label>
+      <label style="margin-top:.75rem">
+        Пароль
+        <input type="password" id="login-password" name="password" required autocomplete="current-password">
+      </label>
+      <div id="login-error" class="error-msg hidden" style="margin-top:1rem"></div>
+      <button type="submit" style="width:100%;margin-top:1.25rem;padding:.6875rem">Войти</button>
+    </form>
+  </div>
+</div>
+
+<!-- ── Dashboard ──────────────────────────── -->
+<div id="dashboard" class="hidden">
+
+  <header>
+    <span class="brand">МедКлиник</span>
+    <div class="user-info">
+      <span id="user-display"></span>
+      <button id="logout-btn" class="btn-outline btn-sm">Выйти</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="patients">Пациенты</button>
+    <button class="tab-btn" data-tab="doctors">Врачи</button>
+    <button class="tab-btn" data-tab="departments">Отделения</button>
+    <button class="tab-btn" data-tab="appointments">Записи</button>
+  </nav>
+
+  <main>
+
+    <!-- ── Пациенты ── -->
+    <section id="tab-patients" class="tab-panel">
+      <div class="panel-header"><h2>Пациенты</h2></div>
+      <div id="patients-error"   class="error-msg   hidden"></div>
+      <div id="patients-success" class="success-msg hidden"></div>
+
+      <div class="form-card">
+        <h3>Добавить пациента</h3>
+        <form id="patient-form">
+          <div class="form-row">
+            <label>ФИО<input name="full_name" required></label>
+            <label>ИИН<input name="iin" maxlength="12" required placeholder="12 цифр"></label>
+            <label>Телефон<input name="phone" required placeholder="+7XXXXXXXXXX"></label>
+          </div>
+          <div class="form-row">
+            <label>Дата рождения<input name="birth_date" type="date"></label>
+            <label>
+              Пол
+              <select name="gender">
+                <option value="">— не указан —</option>
+                <option value="М">Мужской</option>
+                <option value="Ж">Женский</option>
+              </select>
+            </label>
+          </div>
+          <button type="submit">Добавить</button>
+        </form>
+      </div>
+
+      <div class="table-wrap">
+        <table id="patients-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>ФИО</th><th>ИИН</th><th>Телефон</th>
+              <th>Дата рожд.</th><th>Пол</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Врачи ── -->
+    <section id="tab-doctors" class="tab-panel hidden">
+      <div class="panel-header"><h2>Врачи</h2></div>
+      <div id="doctors-error"   class="error-msg   hidden"></div>
+      <div id="doctors-success" class="success-msg hidden"></div>
+
+      <div id="doctor-form-card" class="form-card admin-only hidden">
+        <h3>Добавить врача</h3>
+        <form id="doctor-form">
+          <div class="form-row">
+            <label>Email<input name="email" type="email" required autocomplete="off"></label>
+            <label>Пароль<input name="password" type="password" required minlength="6" autocomplete="new-password"></label>
+            <label>ФИО<input name="full_name" required></label>
+          </div>
+          <div class="form-row">
+            <label>
+              Отделение
+              <select name="department_id" id="doctor-dept-select" required>
+                <option value="">— выберите —</option>
+              </select>
+            </label>
+            <label>ИИН<input name="iin" maxlength="12" required placeholder="12 цифр"></label>
+            <label>Телефон<input name="phone" required placeholder="+7XXXXXXXXXX"></label>
+          </div>
+          <div class="form-row">
+            <label>Специализация<input name="specialization" required></label>
+            <label>Кабинет<input name="cabinet"></label>
+          </div>
+          <button type="submit">Добавить</button>
+        </form>
+      </div>
+
+      <div class="table-wrap">
+        <table id="doctors-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>ФИО / email</th><th>Специализация</th>
+              <th>Отделение</th><th>Телефон</th><th>Кабинет</th>
+              <th class="admin-only hidden">Действия</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Отделения ── -->
+    <section id="tab-departments" class="tab-panel hidden">
+      <div class="panel-header"><h2>Отделения</h2></div>
+      <div id="departments-error"   class="error-msg   hidden"></div>
+      <div id="departments-success" class="success-msg hidden"></div>
+
+      <div id="dept-form-card" class="form-card admin-only hidden">
+        <h3>Добавить отделение</h3>
+        <form id="dept-form">
+          <div class="form-row">
+            <label>Название<input name="name" required></label>
+            <label>Описание<input name="description"></label>
+          </div>
+          <button type="submit">Добавить</button>
+        </form>
+      </div>
+
+      <div class="table-wrap">
+        <table id="departments-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Название</th><th>Описание</th>
+              <th class="admin-only hidden">Действия</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Записи на приём ── -->
+    <section id="tab-appointments" class="tab-panel hidden">
+      <div class="panel-header"><h2>Записи на приём</h2></div>
+      <div id="appointments-error"   class="error-msg   hidden"></div>
+      <div id="appointments-success" class="success-msg hidden"></div>
+
+      <div class="form-card">
+        <h3>Создать запись</h3>
+        <form id="appt-form">
+          <div class="form-row">
+            <label>
+              Врач
+              <select name="doctor_id" id="appt-doctor-select" required>
+                <option value="">— выберите —</option>
+              </select>
+            </label>
+            <label>
+              Пациент
+              <select name="patient_id" id="appt-patient-select" required>
+                <option value="">— выберите —</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Дата и время<input name="scheduled_at" type="datetime-local" required></label>
+            <label>Причина обращения<input name="reason" maxlength="255"></label>
+          </div>
+          <button type="submit">Создать запись</button>
+        </form>
+      </div>
+
+      <div class="filter-tabs" id="appt-filter-tabs">
+        <button class="filter-tab active" data-filter="all">Все</button>
+        <button class="filter-tab" data-filter="scheduled">Запланированные</button>
+        <button class="filter-tab" data-filter="completed">Завершённые</button>
+        <button class="filter-tab" data-filter="cancelled">Отменённые</button>
+      </div>
+
+      <div class="table-wrap">
+        <table id="appointments-table">
+          <thead>
+            <tr>
+              <th>Пациент</th><th>Врач</th><th>Специализация</th>
+              <th>Дата и время</th><th>Статус</th><th>Причина</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div><!-- /#dashboard -->
+
+<!-- ── Edit appointment modal ──────────────── -->
+<div id="appt-edit-modal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h3>Редактировать запись</h3>
+    <label>Дата и время
+      <input type="datetime-local" id="edit-scheduled-at" required>
+    </label>
+    <label style="margin-top:.75rem">Статус
+      <select id="edit-status">
+        <option value="scheduled">Запланирована</option>
+        <option value="completed">Завершена</option>
+        <option value="cancelled">Отменена</option>
+        <option value="no_show">Не явился</option>
+      </select>
+    </label>
+    <label style="margin-top:.75rem">Причина
+      <input type="text" id="edit-reason" maxlength="255">
+    </label>
+    <div class="modal-actions">
+      <button type="button" class="btn-outline" onclick="closeEditModal()">Отмена</button>
+      <button type="button" class="btn-primary" onclick="saveEditAppointment()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Delete confirmation modal ───────────── -->
+<div id="appt-delete-modal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h3>Удалить запись?</h3>
+    <p>Это действие нельзя отменить.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn-outline" onclick="closeDeleteModal()">Отмена</button>
+      <button type="button" class="btn-sm btn-danger" style="padding:.5rem 1rem"
+              onclick="confirmDeleteAppointment()">Подтвердить</button>
+    </div>
+  </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
