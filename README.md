@@ -17,24 +17,35 @@
 
 ## Структура проекта
 
+## Структура проекта
+
 ```
-medklinik/
+MedClinic/
 ├── app/
-│   ├── main.py          # точка входа FastAPI
-│   ├── config.py        # настройки (.env)
-│   ├── database.py      # сессия SQLAlchemy
-│   ├── enums.py         # перечисления (роли, статусы)
-│   ├── models.py        # ORM-модели (7 таблиц)
-│   ├── schemas.py       # Pydantic-схемы + валидация
-│   ├── validators.py    # ИИН, телефон, дата
-│   ├── seed.py          # наполнение тестовыми данными
-│   └── routers/         # CRUD-роуты (Неделя 4+)
-├── tests/               # pytest-тесты
-├── schema.sql           # DDL-схема БД (PostgreSQL)
-├── requirements.txt
-├── .env.example
-├── Dockerfile
-└── docker-compose.yml
+│   ├── main.py              # точка входа FastAPI, подключение роутеров
+│   ├── config.py            # настройки из .env
+│   ├── database.py          # engine и сессии SQLAlchemy
+│   ├── auth.py              # JWT-авторизация, хэширование паролей
+│   ├── enums.py             # роли и статусы (Enum)
+│   ├── models.py            # ORM-модели (7 таблиц)
+│   ├── schemas.py           # Pydantic-схемы запросов/ответов
+│   ├── validators.py        # валидация ИИН, телефона, даты
+│   ├── seed.py              # тестовые данные (Faker)
+│   ├── routers/             # CRUD-эндпоинты
+│   │   ├── patients.py      #   пациенты
+│   │   ├── doctors.py       #   врачи
+│   │   ├── departments.py   #   отделения
+│   │   └── appointments.py  #   записи на приём
+│   └── static/              # веб-интерфейс (HTML/CSS/JS)
+├── tests/                   # pytest-тесты (93 теста)
+│   ├── conftest.py          # фикстуры, тестовая БД
+│   └── test_*.py            # тесты по модулям
+├── schema.sql               # DDL-схема БД (PostgreSQL)
+├── medklinik_erd.png        # ER-диаграмма
+├── .env.example             # шаблон переменных окружения
+├── Dockerfile               # образ приложения
+└── docker-compose.yml       # запуск api + PostgreSQL
+```
 ```
 
 ## Запуск — вариант A: локально (SQLite, быстрый старт)
